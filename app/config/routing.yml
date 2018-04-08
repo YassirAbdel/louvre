@@ -1,0 +1,12 @@
+#lv_reservation:
+    #resource: "@LVReservationBundle/Resources/config/routing.yml"
+    #prefix:   /
+#lv_core:
+    #resource: "@LVCoreBundle/Resources/config/routing.yml"
+    #prefix:   /
+app_home:
+    resource: '@LVCoreBundle/Controller/'
+    type: annotation
+app_reservation:
+    resource: '@LVReservationBundle/Controller/'
+    type: annotation

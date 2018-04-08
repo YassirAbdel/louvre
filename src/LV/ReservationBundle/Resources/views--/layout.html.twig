@@ -1,0 +1,20 @@
+{# src/OC/PlatformBundle/Resources/views/layout.html.twig #}
+
+{% extends "LVCoreBundle::layout.html.twig" %}
+
+{% block title %}
+  Annonces - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+
+ 
+  <h1>Annonces</h1>
+
+  <hr>
+
+  {# On définit un nouveau bloc, que les vues du bundle pourront remplir #}
+  {% block lvplatform_body %}
+  {% endblock %}
+
+{% endblock %}

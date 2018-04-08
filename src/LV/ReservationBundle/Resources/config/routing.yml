@@ -1,0 +1,3 @@
+lv_reservation_homepage:
+    path:     /reserver
+    defaults: { _controller: LVReservationBundle:Default:reserver() }
