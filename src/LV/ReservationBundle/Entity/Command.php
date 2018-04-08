@@ -86,10 +86,12 @@ class Command
     */
     public function addTicket(Ticket $ticket)
     {
-        $this->tickets[] = $ticket;
-
+        //$this->tickets[] = $ticket;
+        // ou cette syntaxe
+        $this->tickets->add($ticket);
         // On lie la commande au billet
         $ticket->setCommand($this);
+        
     }
 
    /**
