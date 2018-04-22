@@ -21,28 +21,34 @@ class CommandType extends AbstractType
         $builder
         ->add('bookingDate', DateTimeType::class, array(
             'widget' => 'single_text',
-            'attr' => ['class' => 'js-datepicker'],
-            'html5' => false,
+            'attr' => ['class' => 'js-datepicker form-control'],
+            'html5' => true,
             'format' => 'dd/MM/yyyy'
+            
         ))
         ->add('ticketsType', ChoiceType::class, array(
-        'choices'  => $this->dayType())
+        'choices'  => $this->dayType(),
+        'expanded' => true,
+         'attr' => array('class' => 'margin'),
+        'label_attr' => array('class' => 'margin')
+        
+            )
         )
-        ->add('numberTickets', TextType::class)
         ->add('email', TextType::class)
-        //->add('bookingCode', TextType::class)
         ->add('tickets', CollectionType::class, array(
             'entry_type' => TicketType::class,
             'allow_add' => true,
             'allow_delete' => true,
             'by_reference' => false
         ))
-        ->add('Enregistrer votre commande', SubmitType::class)
+        ->add('Enregistrer votre commande', SubmitType::class, array(
+            'attr' => ['class' => 'btn btn-secondary my-2 my-sm-0']
+        ))
         ;
     }
     
     public function dayType() {
-        $hour = date('H');
+        //$hour = date('H');
         return array(
         'Journée' => "journée",
         'Demi journée' => "demi journée",

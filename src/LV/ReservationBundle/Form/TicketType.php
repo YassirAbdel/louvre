@@ -22,15 +22,39 @@ class TicketType extends AbstractType
         $builder
         ->add('reducedPrice', CheckboxType::class, array(
             'required' => false,
-            'label'=>'Tarif réduit (o/n)'
+            'label' => 'Tarif réduit (o/n)',
+            //'class' => Modality::class
+            //'label_attr' => 'class': 'form-control'
+            //'attr''
+            'attr' => array('class' => 'margin'),
+            'label_attr' => array('class' => 'margin')
             ))
-        ->add('customerName',  TextType::class, ["label"=>"Nom"])
-        ->add('customerFirstName',  TextType::class, ["label"=>"Prénom"])
-        ->add('customerCountry',  TextType::class, ["label"=>"Pays"])
+        ->add('customerName',  TextType::class, array(
+            'label' => 'Nom',
+            'attr' => array('class' => 'form-ticket-control'),
+            'label_attr' => array(
+                'class' => 'control-label',
+                'placeholder' => 'Enter password'
+                
+                ),
+            
+        ))
+        ->add('customerFirstName',  TextType::class, array(
+            'label' => 'Prénom',
+            'attr' => array('class' => 'form-ticket-control'),
+            'label_attr' => array('class' => 'control-label')
+        ))
+        ->add('customerCountry',  TextType::class, array(
+            'label' => 'Pays',
+            'attr' => array('class' => 'form-ticket-control'),
+            'label_attr' => array('class' => 'control-label')
+        ))
         ->add('customerBirthDate', BirthdayType::class, array(
             'label' => 'Date de naissance',
             'years' => range(date('Y'), 1930),
-            'format' => 'dd MMM yyyy'
+            'format' => 'dd MMM yyyy',
+            'attr' => array('class' => 'margin'),
+            'label_attr' => array('class' => 'margin')
             ));
     }
     

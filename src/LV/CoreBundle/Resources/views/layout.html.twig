@@ -9,9 +9,14 @@
     <title>{% block title %}OC Plateforme{% endblock %}</title>
 
     {% block stylesheets %}
-      {# On charge le CSS de bootstrap depuis le site directement #}
+      {# On charge le CSS de bootstrap depuis le site directement cerulean, untided, sandstone litera #}
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css">
+        
+        <!--<link rel="stylesheet" href="//bootswatch.com/4/cerulean/bootstrap.min.css">-->
+        <link href="assets/css/styles.css">
+        <link rel="stylesheet" href="{{ asset('css/styles.css') }}" type="text/css" />
+        
     {% endblock %}
     {% block javascripts %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -21,44 +26,123 @@
     {% endblock %}
     <style>
         
-.dateNA span, dateToday a, .dateValid a, .dateDue a, .datePast a {
-	box-sizing: border-box !important;
-}
+        body
+        {
+            font-size: 1.5rem;
+        }
+        
+        .h2 {
+            font-size: 2.7rem;
+        }
+        
+        .h3 {
+            font-size: 2.5rem;
+        }
+        
+        .margin {
+            margin-right: 1rem;
+        }
+        
+        .btn {
+            font-size: 1.3rem;
+            margin-top: 0.5rem;
+        }
+        
+        #add_ticket
+        {
+            margin-top: 0.5rem;
+            color: #fff;
+            background-color: #a5171c;
+            border-color: #9a161a;
+            background-image: -webkit-gradient(linear, left top, left bottom, from(#e12b31), color-stop(60%, #C71C22), to(#b5191f));
+            background-image: linear-gradient(#e12b31, #C71C22 60%, #b5191f);
+            background-repeat: no-repeat;
+            margin-bottom: 0.8rem;
+        }
+        
+        #lv_reservationbundle_command_tickets {
+            padding-left: 1.7rem;
+        }
+        
+        .form-ticket-control {
+            display: block;
+            width: 20%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+            transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+        }
+        
+        .btn-secondary {
+            font-size: 1.7rem;
+        }
+        
+        .form-control {
+            font-size: 1.2rem;
+        }
+        
+        #lv_reservationbundle_command_ticketsType_0 {
+            margin-left: 0rem;
+            margin-right: 1rem;
+            margin-top: 1.3rem;
+        }
+        
+        #lv_reservationbundle_command_ticketsType_1 {
+            margin-left: 1rem;
+            margin-right: 1rem;
+            margin-top: 1.3rem;
+        }
+        
+        .form-control {
+            width: 70%;
+        }
+        
+        .dateNA span, dateToday a, .dateValid a, .dateDue a, .datePast a {
+            box-sizing: border-box !important;
+        }
 
-.dateNA span {
-	background-color: #edecec !important;
-    background-image :none !important;
-	border: none !important;
-    color: #abacac !important;
-}
+        .dateNA span {
+            background-color: #edecec !important;
+            background-image :none !important;
+            border: none !important;
+            color: #abacac !important;
+        }
 
-.dateToday a {
-	border: solid 2px #ffce0a !important;
-	background-color: #fff !important;
-    background-image :none !important;
-    color: #000 !important;
-}
+        .dateToday a {
+            border: solid 2px #ffce0a !important;
+            background-color: #fff !important;
+            background-image :none !important;
+            color: #000 !important;
+        }
 
-.dateValid a {
-	border-size: 2px !important;
-	background-color: #fff !important;
-    background-image :none !important;
-    color: #000 !important;
-}
+        .dateValid a {
+            border-size: 2px !important;
+            background-color: #fff !important;
+            background-image :none !important;
+            color: #000 !important;
+        }
 
-.dateDue a {
-	background-color: #ffce0a !important;
-    background-image :none !important;
-    color: #000 !important;
-}
+        .dateDue a {
+            background-color: #ffce0a !important;
+            background-image :none !important;
+            color: #000 !important;
+        }
 
-.datePast a {
-	background-color: mustard !important;
-    background-image :none !important;
-    color: #000 !important;
-	position: relative;
+        .datePast a {
+            background-color: mustard !important;
+            background-image :none !important;
+            color: #000 !important;
+            position: relative;
 	
-	:after {
+            :after {
 		content: 'This payment will posted as late.';
 		width: 125px;
 		background: #fff;
@@ -68,8 +152,8 @@
 		position: absolute;
 		top: 0;
 		left: 100%;
-	}
-}
+            }
+        }
 
 
     </style>
@@ -96,7 +180,7 @@
     <hr>
 
     <footer>
-      <p>Musée de Louvre © {{ 'now'|date('Y') }}.</p>
+      <p>Musée de Louvre © {{ 'now'|date('Y') }}</p>
     </footer>
   </div>
 

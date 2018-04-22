@@ -1,7 +1,7 @@
 {# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
 
 <div class="well">
-    <h3>Votre commande</h3>
+ <h3>Votre commande</h3>
 
   {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
@@ -10,25 +10,21 @@
 
   {# Génération du label + error + widget pour un champ. #}
   
-  {% if form.bookingDate is defined %}
-    {{form_row(form.bookingDate, { 'label': 'Date de la visite' }) }}
-  {% endif %}
-
-  {# Génération manuelle et éclatée : #}
-  
   <div class="form-group">
-    {{ form_label(form.numberTickets, "Nombre de billets", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
-    {{ form_errors(form.numberTickets) }}
-    <div class="col-sm-5">
-      {{ form_widget(form.numberTickets, {'attr': {'class': 'form-control'}}) }}
-    </div>
+  {{ form_label(form.bookingDate, "Date de visite", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+  <div class="col-sm-5">
+  {% if form.bookingDate is defined %}
+    {{form_widget(form.bookingDate)}}
+  {% endif %}
   </div>
-    
+  </div>
+  
+  {# Génération manuelle et éclatée : #}
   <div class="form-group">
     {{ form_label(form.ticketsType, "Type de billets", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
     {{ form_errors(form.ticketsType) }}
     <div class="col-sm-5">
-      {{ form_widget(form.ticketsType, {'attr': {'class': 'form-control'}}) }}
+      {{ form_widget(form.ticketsType) }}
     </div>
   </div>
   
@@ -39,13 +35,17 @@
       {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
-  <h3>Vos billets</h3> 
-  {% if form.tickets is defined %}{{ form_row(form.tickets,{'label': ' '}) }}{% endif %}
+    
+  <h3>Vos billets</h3>
+  
+  <div class="form-group">
+    {% if form.tickets is defined %}{{ form_row(form.tickets,{'label': ' '}) }}{% endif %}
+  </div>
   <a href="#" id="add_ticket" class="btn btn-default">Ajouter un ticket</a>
 <script type="text/javascript">
-    $(document).ready(function() {
+    //$(document).ready(function() {
     
-    });
+    //});
     // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
     var $container = $('div#lv_reservationbundle_command_tickets');
 
@@ -60,11 +60,11 @@
       return false;
     });
 
-    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un (cas d'une nouvelle annonce par exemple).
+    // On ajoute un premier champ automatiquement s'il n'en existe pas déjà un.
     if (index == 0) {
       addticket($container);
     } else {
-      // S'il existe déjà des catégories, on ajoute un lien de suppression pour chacune d'entre elles
+      // S'il existe déjà des billets, on ajoute un lien de suppression pour chacun d'entre eux
       $container.children('div').each(function() {
         addDeleteLink($(this));
       });
@@ -83,7 +83,7 @@
       // On crée un objet jquery qui contient ce template
       var $prototype = $(template);
 
-      // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+      // On ajoute au prototype un lien pour pouvoir supprimer le billet
       addDeleteLink($prototype);
 
       // On ajoute le prototype modifié à la fin de la balise <div>
@@ -93,7 +93,7 @@
       index++;
     }
 
-    // La fonction qui ajoute un lien de suppression d'une catégorie
+    // La fonction qui ajoute un lien de suppression d'un billet
     function addDeleteLink($prototype) {
       // Création du lien
       var $deleteLink = $('<a href="#" class="btn btn-danger">Supprimer</a>');
@@ -101,7 +101,7 @@
       // Ajout du lien
       $prototype.append($deleteLink);
 
-      // Ajout du listener sur le clic du lien pour effectivement supprimer la catégorie
+      // Ajout du listener sur le clic du lien pour effectivement supprimer le billet
       $deleteLink.click(function(e) {
         $prototype.remove();
 
@@ -109,8 +109,10 @@
         return false;
       });
     }
+    
+    
     // Datepicker
-    //jQuery(document).ready(function() {
+    
     var holiDays = [
              
           [2018,04,20,'Service'],[2018,04,21,'Service'],[2018,04,22,'Service']
@@ -148,7 +150,7 @@ $.fn.datepicker.dates['fr'] = {
            weekStart: "1",
            language: "fr",
            daysOfWeekDisabled: "0",
-           datesDisabled: ['01/05/2018', '08/05/2018', '21/05/2018', '14/07/2018'],
+           datesDisabled: ['01/05/2018', '08/05/2018', '21/05/2018', '14/07/2018', '15/08/2018'],
            todayHighlight: true,
            startDate: "today"
            }).attr("readonly","readonly");
