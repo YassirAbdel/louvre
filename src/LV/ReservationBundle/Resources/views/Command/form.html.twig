@@ -1,6 +1,5 @@
 {# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
 
-
 <div class="well">
     <h3>Votre commande</h3>
 
@@ -10,6 +9,7 @@
   {{ form_errors(form) }}
 
   {# Génération du label + error + widget pour un champ. #}
+  
   {% if form.bookingDate is defined %}
     {{form_row(form.bookingDate, { 'label': 'Date de la visite' }) }}
   {% endif %}
@@ -19,7 +19,7 @@
   <div class="form-group">
     {{ form_label(form.numberTickets, "Nombre de billets", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
     {{ form_errors(form.numberTickets) }}
-    <div class="col-sm-10">
+    <div class="col-sm-5">
       {{ form_widget(form.numberTickets, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
@@ -27,7 +27,7 @@
   <div class="form-group">
     {{ form_label(form.ticketsType, "Type de billets", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
     {{ form_errors(form.ticketsType) }}
-    <div class="col-sm-10">
+    <div class="col-sm-5">
       {{ form_widget(form.ticketsType, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
@@ -35,21 +35,13 @@
   <div class="form-group">
     {{ form_label(form.email, "Votre Email", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
     {{ form_errors(form.email) }}
-    <div class="col-sm-10">
+    <div class="col-sm-5">
       {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
   <h3>Vos billets</h3> 
   {% if form.tickets is defined %}{{ form_row(form.tickets,{'label': ' '}) }}{% endif %}
   <a href="#" id="add_ticket" class="btn btn-default">Ajouter un ticket</a>
-<script>
-    //$(document).ready(function() {
-        
-    //});
-</script>
-{# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
-
-
 <script type="text/javascript">
     $(document).ready(function() {
     

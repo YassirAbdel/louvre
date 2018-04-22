@@ -20,7 +20,11 @@ class DefaultController extends Controller
         $command = new \LV\ReservationBundle\Entity\Command;
         $form   = $this->get('form.factory')->create(CommandType::class, $command);
         $bookingDate = $command->getBookingDate();
-        $command->setBookingCode('flgljkbkbkb');
+        // Enregistrement d'un code aléatoire de la commande de 10 caractères alphanumériques
+        // En appellant le service bookingCode
+        $command->setBookingCode($this->container->get('lv_reservation.bookingCode')->getRamdomCode(10));
+        //OU en utilisant la fonction PHP bin2hex
+        //$command->setBookingCode(bin2hex(openssl_random_pseudo_bytes(10)));
         
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -36,14 +40,13 @@ class DefaultController extends Controller
             // Condition : si la capacité du musée est unférieur à 1000 billets max par raport au jour de réservation
             if ($numberTickets < 1000)    
             {
-                // Appel du service lv_reservation.sumratetickets
-                $sumRateTickets = $this->container->get('lv_reservation.sumratetickets');
-                // Récupération de la somme totale de la commande et du nombre de tickets
-                $sumTicketsNumber = $sumRateTickets->getSumRateTickets($command->getTickets());
+                // Appel du service sumratetickets et récupération de la somme totale de la commande et du nombre de tickets
+                $sumTicketsNumber = $this->container->get('lv_reservation.sumratetickets')->getSumRateTickets($command->getTickets());
                 // Enregistrement de la somme totale de la commande 
                 $command->setSum($sumTicketsNumber[0]);
                 // Enregistrement du nombre de tickets 
                 $command->setNumberTickets($sumTicketsNumber[1]);
+                
                 $em->persist($command);
                 $em->flush();
                 $request->getSession()->getFlashBag()->add('commande', 'Nouvelle commande enregistrée.');

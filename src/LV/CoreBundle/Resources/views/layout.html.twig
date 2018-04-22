@@ -17,6 +17,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js" charset="UTF-8"></script>
+        
     {% endblock %}
     <style>
         
@@ -85,17 +86,8 @@
     </div>
 
     <div class="row">
-      <div id="menu" class="col-md-3">
-        <h3>Les annonces</h3>
-        <ul class="nav nav-pills nav-stacked">
-          <li><a href="#">Accueil</a></li>
-          <li><a href="#">Réserver un billet</a></li>
-        </ul>
-
-        <h4>Dernières promotions</h4>
-        
-      </div>
-      <div id="content" class="col-md-9">
+      
+      <div id="content" class="col-md-12">
         {% block body %}
         {% endblock %}
       </div>
@@ -104,7 +96,7 @@
     <hr>
 
     <footer>
-      <p>The sky's the limit © {{ 'now'|date('Y') }} and beyond.</p>
+      <p>Musée de Louvre © {{ 'now'|date('Y') }}.</p>
     </footer>
   </div>
 

@@ -5,3 +5,5 @@ services:
     
     lv_reservation.sumratetickets:
         class: LV\ReservationBundle\SumRateTickets\LVSumRateTickets
+    lv_reservation.bookingCode:
+        class: LV\ReservationBundle\BookingCode\LVBookingCode
