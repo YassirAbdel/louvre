@@ -37,7 +37,7 @@ class DefaultController extends Controller
                 ->getRepository('LVReservationBundle:Ticket')
                 ->numberTickets($command->getBookingDate())
                 ;
-            // Condition : si la capacité du musée est unférieur à 1000 billets max par raport au jour de réservation
+            // Condition : si la capacité du musée est inférieure à 1000 billets max le même jour
             if ($numberTickets < 1000)    
             {
                 // Appel du service sumratetickets et récupération de la somme totale de la commande et du nombre de tickets
@@ -49,12 +49,14 @@ class DefaultController extends Controller
                 
                 $em->persist($command);
                 $em->flush();
-                $request->getSession()->getFlashBag()->add('commande', 'Nouvelle commande enregistrée.');
+                $request->getSession()->getFlashBag()->add('commande', 'Votre commande a été enregistrée. Vous recevrez un Email de confirmation');
+                return $this->render('LVReservationBundle:Command:view.html.twig');
             }
             // Condition : si la capacité du musée est dépassée
             else 
             {
-                $request->getSession()->getFlashBag()->add('billetsmax', 'Plus de billets disponible à ce jour.');
+                $request->getSession()->getFlashBag()->add('billetsmax', 'Plus de billets disponible à ce jour. La commande n\'a pas été enregistrée');
+                return $this->render('LVReservationBundle:Command:view.html.twig');
             }
             //return $this->redirectToRoute('oc_platform_view', array('id' => $advert->getId()));
         }
