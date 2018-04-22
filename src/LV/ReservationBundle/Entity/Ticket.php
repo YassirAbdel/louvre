@@ -4,6 +4,7 @@ namespace LV\ReservationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Ticket
  *
@@ -20,14 +21,14 @@ class Ticket
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
-     * @var string
+     * @var \Date
      *
-     * @ORM\Column(name="ticket_type", type="string", length=255)
+     * @ORM\Column(name="ticket_date", type="date")
      */
-    private $ticketType;
-
+    private $date;
+    
     /**
      * @var string
      *
@@ -82,6 +83,14 @@ class Ticket
     */
     private $command; // Plusieurs tickets sont liés à une commande
     
+    
+    public function __construct()
+    {
+        $date = new \DateTime();
+        $this->date = $date;
+        
+    }
+    
     /**
      * Get id.
      *
@@ -91,31 +100,20 @@ class Ticket
     {
         return $this->id;
     }
-
+    
     /**
-     * Set ticketType.
+     * Set date.
      *
-     * @param string $ticketType
+     * @param \DateTime $date
      *
-     * @return Ticket
+     * @return ticket
      */
-    public function setTicketType($ticketType)
+    public function setDate($date)
     {
-        $this->ticketType = $ticketType;
-
+        $this->date = $date;
         return $this;
     }
-
-    /**
-     * Get ticketType.
-     *
-     * @return string
-     */
-    public function getTicketType()
-    {
-        return $this->ticketType;
-    }
-
+    
     /**
      * Set rateType.
      *
@@ -291,5 +289,53 @@ class Ticket
     public function getCommand()
     {
         return $this->command;
+    }
+    
+    function sumTickets()
+    {
+        $dateDay = new \Datetime();
+        $birthDate = $this->getCustomerBirthDate();
+        $reducedPrice = $this->getReducedPrice();
+         
+        $interval = $birthDate->diff($dateDay);
+        $interval =  $interval->format('%R%a');
+        $numberYears = intval($interval/365);
+        
+        if ($numberYears >= 4 && $numberYears <= 12)
+        {
+            $ticketRateType[1] = 8;
+            $ticketRateType[2] = "Enfant";
+        }
+        if ($numberYears >= 60)
+        {
+            $ticketRateType[1] = 12;
+            $ticketRateType[2] = "Sénior";
+        } 
+        if ($numberYears < 4)
+        {
+            $ticketRateType[1] = 0;
+            $ticketRateType[2] = "Bébé";
+        }
+        if ($numberYears > 12 && $numberYears < 60)
+        {
+            $ticketRateType[1] = 16 ;
+            $ticketRateType[2] = "Normal";
+        }
+        if ($reducedPrice == 1)
+        {
+            $ticketRateType[1] = 10 ;
+            $ticketRateType[2] = "Tarif réduit";
+        }
+        
+        $ticketRate = $ticketRateType[1];
+                $RateType = $ticketRateType[2];
+                //$commandSum = $commandSum + $ticketRate;
+                
+                // On ajoute le tarif 
+                $this->setTicketRate($ticketRate);
+                // On ajoute le type de tarif
+                $this->setRateType($RateType);
+        //dump($this); die();
+        return $ticketRateType;
     }
 }

@@ -4,6 +4,11 @@ namespace LV\ReservationBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+// Ajoutez ce use pour le contexte
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 
 /**
  * command
@@ -20,14 +25,26 @@ class Command
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
-
-    /**
+     private $id;
+   
+     /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+    * @ORM\Column(name="booking_date", type="datetime", nullable=false)
+    */
+    private $bookingDate;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tickets_type", type="string", length=255)
+     */
+     private $ticketsType;
 
     /**
      * @var int
@@ -63,8 +80,10 @@ class Command
     private $tickets; // une commande est liée à plusieurs tickets
 
     
-    public function __construct() {
+    public function __construct()
+    {
         $this->date = new \DateTime();
+        $this->bookingDate = new \DateTime();
         $this->tickets = new ArrayCollection();
     }
     
@@ -111,7 +130,7 @@ class Command
     {
         return $this->id;
     }
-
+    
     /**
      * Set date.
      *
@@ -122,8 +141,50 @@ class Command
     public function setDate($date)
     {
         $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * Get date.
+     *
+     * @return \DateTime
+     */
+    public function getBookingDate()
+    {
+        return $this->bookingDate;
+    }
+    
+    /**
+    * @param \DateTime $date
+    */
+    public function setBookingDate($bookingDate)
+    {
+        $this->bookingDate = $bookingDate;
+        return $this;
+    }
+    
+    /**
+     * Set ticketType.
+     *
+     * @param string $ticketType
+     *
+     * @return Ticket
+     */
+    public function setTicketsType($ticketsType)
+    {
+        $this->ticketsType = $ticketsType;
 
         return $this;
+    }
+
+    /**
+     * Get ticketType.
+     *
+     * @return string
+     */
+    public function getTicketsType()
+    {
+        return $this->ticketsType;
     }
 
     /**
@@ -135,7 +196,8 @@ class Command
     {
         return $this->date;
     }
-
+    
+    
     /**
      * Set sum.
      *
@@ -239,5 +301,30 @@ class Command
      {
         return $this->tickets;
      }
+     
+     /**
+     * @Assert\Callback
+     */
+     
+     // Si la date de la réservation est égale à la date du jour :
+     // Contrôler le type de billet par rapport à l'heure de réservation
+     public function isContentValid(ExecutionContextInterface $context, $payload)
+      {
+          $nowDate = date("Y-m-d");
+          $nowHour = date("H");
+          $bookingDate = date_format($this->getBookingDate(), "Y-m-d");
+          $ticketsType = $this->getTicketsType();
+          if ($bookingDate == $nowDate)
+          {
+              if (($ticketsType == "journée") && ($nowHour >= 14))
+              {
+                  $context
+                  ->buildViolation('Le type de billets est invalide car il est trop tard pour réserver des billets pour une journée.') // message
+                  ->atPath('ticketsType') // attribut de l'objet qui est violé
+                  ->addViolation() // ceci déclenche l'erreur, ne l'oubliez pas
+                  ;
+              }
+          }
+      }
      
 }

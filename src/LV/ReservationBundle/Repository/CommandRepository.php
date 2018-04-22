@@ -10,4 +10,10 @@ namespace LV\ReservationBundle\Repository;
  */
 class CommandRepository extends \Doctrine\ORM\EntityRepository
 {
+    //$ticket->setRateType("enfant");
+    function getRateType($advert) 
+    {
+        
+        
+    }
 }

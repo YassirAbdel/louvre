@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use \Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 
+
 class TicketType extends AbstractType
 {
     /**
@@ -19,34 +20,19 @@ class TicketType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('ticketType', TextType::class, ["label"=>"Type"])
-        ->add('rateType',  TextType::class, ["label"=>"Tarif"])
-       // ->add('ticketRate',  TextType::class)
-        ->add('reducedPrice', CheckboxType::class, array('required' => false), ["label"=>"Tarif réduit (o/n)"])
+        ->add('reducedPrice', CheckboxType::class, array(
+            'required' => false,
+            'label'=>'Tarif réduit (o/n)'
+            ))
         ->add('customerName',  TextType::class, ["label"=>"Nom"])
         ->add('customerFirstName',  TextType::class, ["label"=>"Prénom"])
         ->add('customerCountry',  TextType::class, ["label"=>"Pays"])
-        ->add('customerBirthDate', BirthdayType::class, ["label"=>"Date de naissance"]);
-       // ->add('command');
+        ->add('customerBirthDate', BirthdayType::class, array(
+            'label' => 'Date de naissance',
+            'years' => range(date('Y'), 1930),
+            'format' => 'dd MMM yyyy'
+            ));
     }
-    /**
-     * $builder
-      ->add('date',      DateTimeType::class)
-      ->add('title',     TextType::class)
-      ->add('author',    TextType::class)
-      ->add('content',   TextareaType::class)
-      ->add('image',     ImageType::class)
-      ->add('categories', EntityType::class, array(
-        'class'         => 'OCPlatformBundle:Category',
-        'choice_label'  => 'name',
-        'multiple'      => true,
-        'query_builder' => function(CategoryRepository $repository) use($pattern) {
-          return $repository->getLikeQueryBuilder($pattern);
-        }
-      ))
-      ->add('save',      SubmitType::class)
-    ;
-     */
     
     /**
      * {@inheritdoc}

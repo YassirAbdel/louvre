@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use \Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CommandType extends AbstractType
 {
@@ -18,8 +19,15 @@ class CommandType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('date', DateTimeType::class)
-        //->add('sum', TextType::class)
+        ->add('bookingDate', DateTimeType::class, array(
+            'widget' => 'single_text',
+            'attr' => ['class' => 'js-datepicker'],
+            'html5' => false,
+            'format' => 'dd/MM/yyyy'
+        ))
+        ->add('ticketsType', ChoiceType::class, array(
+        'choices'  => $this->dayType())
+        )
         ->add('numberTickets', TextType::class)
         ->add('email', TextType::class)
         //->add('bookingCode', TextType::class)
@@ -29,9 +37,19 @@ class CommandType extends AbstractType
             'allow_delete' => true,
             'by_reference' => false
         ))
-        ->add('save', SubmitType::class)
+        ->add('Enregistrer votre commande', SubmitType::class)
         ;
-    }/**
+    }
+    
+    public function dayType() {
+        $hour = date('H');
+        return array(
+        'Journée' => "journée",
+        'Demi journée' => "demi journée",
+        );
+    }
+    
+    /**
      * {@inheritdoc}
      */
     

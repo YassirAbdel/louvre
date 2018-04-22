@@ -1,16 +1,17 @@
 {# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
 
-<h3>Formulaire d'annonce</h3>
 
 <div class="well">
+    <h3>Votre commande</h3>
+
   {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
 
   {# Les erreurs générales du formulaire. #}
   {{ form_errors(form) }}
 
   {# Génération du label + error + widget pour un champ. #}
-  {% if form.date is defined %}
-    {{ form_row(form.date) }}
+  {% if form.bookingDate is defined %}
+    {{form_row(form.bookingDate, { 'label': 'Date de la visite' }) }}
   {% endif %}
 
   {# Génération manuelle et éclatée : #}
@@ -22,6 +23,14 @@
       {{ form_widget(form.numberTickets, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
+    
+  <div class="form-group">
+    {{ form_label(form.ticketsType, "Type de billets", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+    {{ form_errors(form.ticketsType) }}
+    <div class="col-sm-10">
+      {{ form_widget(form.ticketsType, {'attr': {'class': 'form-control'}}) }}
+    </div>
+  </div>
   
   <div class="form-group">
     {{ form_label(form.email, "Votre Email", {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
@@ -30,16 +39,21 @@
       {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
     </div>
   </div>
-    
-  {% if form.tickets is defined %}{{ form_row(form.tickets) }}{% endif %}
+  <h3>Vos billets</h3> 
+  {% if form.tickets is defined %}{{ form_row(form.tickets,{'label': ' '}) }}{% endif %}
   <a href="#" id="add_ticket" class="btn btn-default">Ajouter un ticket</a>
-  {# On charge la bibliothèque jQuery. Ici, je la prends depuis le CDN google
-   mais si vous l'avez en local, changez simplement l'adresse. #}
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    //$(document).ready(function() {
+        
+    //});
+</script>
+{# Ajoutez ces lignes JavaScript si vous comptez vous servir des fonctionnalités du bootstrap Twitter #}
 
-{# Voici le script en question : #}
+
 <script type="text/javascript">
-  $(document).ready(function() {
+    $(document).ready(function() {
+    
+    });
     // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
     var $container = $('div#lv_reservationbundle_command_tickets');
 
@@ -70,7 +84,7 @@
       // - le texte "__name__label__" qu'il contient par le label du champ
       // - le texte "__name__" qu'il contient par le numéro du champ
       var template = $container.attr('data-prototype')
-        .replace(/__name__label__/g, 'Ticket n°' + (index+1))
+        .replace(/__name__label__/g, 'Billet n°' + (index+1))
         .replace(/__name__/g,        index)
       ;
 
@@ -103,8 +117,51 @@
         return false;
       });
     }
-  });
+    // Datepicker
+    //jQuery(document).ready(function() {
+    var holiDays = [
+             
+          [2018,04,20,'Service'],[2018,04,21,'Service'],[2018,04,22,'Service']
+
+               ];
+     // set holidays function which is configured in beforeShowDay
+
+ function setHoliDays(date) {
+   for (i = 0; i < holiDays.length; i++) {
+     if (date.getFullYear() == holiDays[i][0]
+          && date.getMonth() == holiDays[i][1] - 1
+          && date.getDate() == holiDays[i][2]) {
+        return [true, 'holiday', holiDays[i][3]];
+     }
+   }
+  return [true, ''];
+}
+
+$.fn.datepicker.dates['fr'] = {
+    days: ["Sunday", "Lundi", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    daysShort: ["Sun", "Lun", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    daysMin: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    months: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+    monthsShort: ["Jan", "Feb", "Mar", "Avr", "Mai", "Juin", "Juil", "Aou", "Sep", "Oct", "Nov", "Dec"],
+    today: "Today",
+    clear: "Clear",
+    format: "dd/mm/yyyy",
+    titleFormat: "MM yyyy", /* Leverages same syntax as 'format' */
+    weekStart: 0
+};
+
+         $('.js-datepicker').datepicker({
+           autoclose: true,
+           startView: "1",
+           weekStart: "1",
+           language: "fr",
+           daysOfWeekDisabled: "0",
+           datesDisabled: ['01/05/2018', '08/05/2018', '21/05/2018', '14/07/2018'],
+           todayHighlight: true,
+           startDate: "today"
+           }).attr("readonly","readonly");
 </script>
+
   
   {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
   {# form_widget(form.save, {'attr': {'class': 'btn btn-primary' }}) #}
