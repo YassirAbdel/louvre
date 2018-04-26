@@ -319,9 +319,9 @@ class Command
               if (($ticketsType == "journée") && ($nowHour >= 14))
               {
                   $context
-                  ->buildViolation('Le type de billets est invalide car il est trop tard pour réserver des billets pour une journée.') // message
-                  ->atPath('ticketsType') // attribut de l'objet qui est violé
-                  ->addViolation() // ceci déclenche l'erreur, ne l'oubliez pas
+                  ->buildViolation('Le type de billets est invalide car il est trop tard pour réserver des billets d\'une journée.') // message
+                  ->atPath('ticketsType') 
+                  ->addViolation()
                   ;
               }
           }

@@ -1,0 +1,25 @@
+{# src/LV/ReservationBundle/Resources/view/Advert/view.html.twig #}
+
+{% extends "LVReservationBundle::layout.html.twig" %}
+
+{% block title %}
+  Avertissement
+{% endblock %}
+
+{% block titlesub %}
+<h1>Avertissement</h1>
+{% endblock %}
+
+{% block lvplatform_body %}
+  <div class="well">
+ 
+  <div>
+      
+      {# On affiche tous les messages flash dont le nom est « billetsmax » #}
+      {% for message in app.session.flashbag.get('billetsmax') %}
+        <p>{{ message }}</p>
+      {% endfor %}
+  </div>
+
+  </div>
+{% endblock %}

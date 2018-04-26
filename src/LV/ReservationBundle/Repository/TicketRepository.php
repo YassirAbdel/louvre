@@ -10,51 +10,8 @@ namespace LV\ReservationBundle\Repository;
  */
 class TicketRepository extends \Doctrine\ORM\EntityRepository
 {
-    
-    /*
-    function getTicketRateType($ticket)
-    {
-        $dateDay = new \Datetime();
-        $birthDate = $ticket->getCustomerBirthDate();
-        $reducedPrice = $ticket->getReducedPrice();
-         
-        $interval = $birthDate->diff($dateDay);
-        $interval =  $interval->format('%R%a');
-        $numberYears = intval($interval/365);
-        
-        if ($numberYears >= 4 && $numberYears <= 12)
-        {
-            $ticketRateType[1] = 8;
-            $ticketRateType[2] = "Enfant";
-        }
-        if ($numberYears >= 60)
-        {
-            $ticketRateType[1] = 12;
-            $ticketRateType[2] = "Sénior";
-        } 
-        if ($numberYears < 4)
-        {
-            $ticketRateType[1] = 0;
-            $ticketRateType[2] = "Bébé";
-        }
-        if ($numberYears > 12 && $numberYears < 60)
-        {
-            $ticketRateType[1] = 16 ;
-            $ticketRateType[2] = "Normal";
-        }
-        if ($reducedPrice == 1)
-        {
-            $ticketRateType[1] = 10 ;
-            $ticketRateType[2] = "Tarif réduit";
-        }
-        
-        return $ticketRateType;
-    }
-     *
-     */
-    
     function numberTickets($date) {
-        //$date = date('Y-m-d');
+        
         return $this->createQueryBuilder('t')
                 ->select('COUNT(t)')
                 ->where('t.date = :date')

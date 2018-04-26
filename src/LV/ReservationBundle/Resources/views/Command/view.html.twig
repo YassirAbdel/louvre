@@ -3,27 +3,129 @@
 {% extends "LVReservationBundle::layout.html.twig" %}
 
 {% block title %}
-  Confirmation
+  Paiement
 {% endblock %}
 
 {% block titlesub %}
-<h1>Confirmation</h1>
+<h1>Paiement</h1>
 {% endblock %}
 
 {% block lvplatform_body %}
   <div class="well">
       
+    
+  <div>
+    <h2>Numéro de commande {{ command.bookingCode }}</h2>
+    <i>Date la réservation : le {{ command.date|date('d/m/Y') }}</i><br>
+    <i>Date de la visite : le {{ command.bookingDate|date('d/m/Y') }}</i><br>
+    <i>Type de billets : {{ command.ticketsType }}</i><br>
+    <i>Nombre de billets : {{ command.numberTickets }}</i><br>
+    <h3>Total à régler : {{ command.sum }} euros</h3>
+  </div>
+  
+  <h2>Détails des billets</h2>
+  {% if listTickets|length > 0 %}
     <div>
+        {% for ticket in listTickets %}
+         {% set counter = ( counter | default(0) ) + 1 %}
+  <p>Billet n° {{ counter}}</p>
+         <ul>
+          <li>{{ ticket.customerFirstName }} {{ ticket.customerName }}</li>
+          <li>{{ ticket.customerBirthDate.date|date('d/m/Y') }}</li>
+          <li>{{ ticket.rateType }}</li>
+          <li>{{ ticket.ticketRate }} euros</li>
+          <li>{{ ticket.customerCountry }}</li>
+         </ul>
+        {% endfor %}
+      
+    </div>
+  {% endif %}
+
+  <div>
       {# On affiche tous les messages flash dont le nom est « commande » #}
       {% for message in app.session.flashbag.get('commande') %}
         <p>{{ message }}</p>
       {% endfor %}
-      {# On affiche tous les messages flash dont le nom est « billetsmax » #}
-      {% for message in app.session.flashbag.get('billetsmax') %}
-        <p>{{ message }}</p>
-      {% endfor %}
-    </div>
-        
-        
+  </div>
+
+<script src="https://js.stripe.com/v3/"></script>
+
+<script type="text/javascript">
+    var stripe = Stripe('pk_test_vVQRfTVoF8Dg99eRxRwxtntA');
+    var elements = stripe.elements();
+</script>
+
+<form action="{{ path('lv_payer_Commande', {'id': command.id}) }}" method="post" id="payment-form">
+    
+    <script
+        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+        data-key="pk_test_vVQRfTVoF8Dg99eRxRwxtntA"
+        data-amount="{{ command.sum * 100}}"
+        data-name="Musée du Louvre"
+        data-description="Paiement des billets"
+        data-locale="auto"
+        data-currency="eur"
+    </script>
+</form>
+
+<script type="text/javascript">
+    
+// Custom styling can be passed to options when creating an Element.
+var style = {
+  base: {
+    // Add your base input styles here. For example:
+    fontSize: '16px',
+    color: "#32325d",
+  }
+};
+
+// Create an instance of the card Element.
+var card = elements.create('card', {style: style});
+
+// Add an instance of the card Element into the `card-element` <div>.
+card.mount('#card-element');
+
+card.addEventListener('change', function(event) {
+  var displayError = document.getElementById('card-errors');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+});
+
+// Create a token or display an error when the form is submitted.
+var form = document.getElementById('payment-form');
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  stripe.createToken(card).then(function(result) {
+    if (result.error) {
+      // Inform the customer that there was an error.
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+      // Send the token to your server.
+      stripeTokenHandler(result.token);
+    }
+  });
+});
+    
+function stripeTokenHandler(token) {
+  // Insert the token ID into the form so it gets submitted to the server
+  var form = document.getElementById('payment-form');
+  var hiddenInput = document.createElement('input');
+  hiddenInput.setAttribute('type', 'hidden');
+  hiddenInput.setAttribute('name', 'stripeToken');
+  hiddenInput.setAttribute('value', token.id);
+  form.appendChild(hiddenInput);
+
+  // Submit the form
+  form.submit();
+}
+</script>
+
+
+
   </div>
 {% endblock %}
