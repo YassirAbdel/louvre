@@ -69,6 +69,31 @@ class DefaultController extends Controller
     }
     
     /**
+     * @Route("/view", name="lv_Commande_view")
+     */
+    
+        public function viewAction(Request $request)
+          {
+            $em = $this->getDoctrine()->getManager();
+            $command = $em->getRepository('LVReservationBundle:Command')->find($request->query->get('id'));
+
+            if (null === $command) {
+              throw new NotFoundHttpException("La commande numéro ".$id." n'existe pas.");
+            }
+
+            // Récupération de la liste des billets de la commande
+            $listTickets = $em
+              ->getRepository('LVReservationBundle:Ticket')
+              ->findBy(array('command' => $command))
+            ;
+            
+            return $this->render('LVReservationBundle:Command:view.html.twig', array(
+              'command'           => $command,
+              'listTickets' => $listTickets,
+            ));
+          }
+          
+    /**
      * @Route("/paiement", name="lv_payer_Commande")
      */
     
@@ -99,35 +124,11 @@ class DefaultController extends Controller
         } catch (Exception $ex) {
             $request->getSession()->getFlashBag()->add('error','Paiement échoué !');
         }
+        // Appel service lv_reservation.email pour envoyer une email de confirmation
+        $this->container->get('lv_reservation.email')->sendNotificationCommand($command);
         return $this->render('LVReservationBundle:Command:paiement.html.twig');
         
     }
-    /**
-     * @Route("/view", name="lv_Commande_view")
-     */
     
-        public function viewAction(Request $request)
-          {
-            //dump($command->query->get('id'));    die();
-            $em = $this->getDoctrine()->getManager();
-            $command = $em->getRepository('LVReservationBundle:Command')->find($request->query->get('id'));
-
-            if (null === $command) {
-              throw new NotFoundHttpException("La commande numéro ".$id." n'existe pas.");
-            }
-
-            // Récupération de la liste des billets de la commande
-            $listTickets = $em
-              ->getRepository('LVReservationBundle:Ticket')
-              ->findBy(array('command' => $command))
-            ;
-            //dump($command);
-            //dump($listTickets);
-            //die();
-            return $this->render('LVReservationBundle:Command:view.html.twig', array(
-              'command'           => $command,
-              'listTickets' => $listTickets,
-            ));
-            
-          }
+    
 }
