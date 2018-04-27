@@ -6,8 +6,8 @@ namespace LV\ReservationBundle\SumRateTickets;
 class LVSumRateTickets
 {
     /**
-     * Calculer le coût totale t le nombre des billets
-     * Récupérer le type d'un ticket 
+     * 1. Ajouter le tarif et type du tarif d'un billet
+     * 2. Calculer le coût totale et le nombre des billets
      */
     
     public function getSumRateTickets ($tickets)

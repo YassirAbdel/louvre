@@ -38,9 +38,11 @@ class DefaultController extends Controller
                 ->numberTickets($command->getBookingDate())
                 ;
             // Condition : si la capacité du musée est inférieure à 1000 billets max le même jour
-            if ($numberTickets < 2)    
+            if ($numberTickets < 1000)    
             {
-                // Appel du service sumratetickets et récupération de la somme totale de la commande et du nombre de tickets
+                // Appel du service sumratetickets : 
+                // 1. ajout du type de tarif d'un billet et du tarif d'un billet 
+                // 2. récupération de la somme totale de la commande, du nombre des billets
                 $sumTicketsNumber = $this->container->get('lv_reservation.sumratetickets')->getSumRateTickets($command->getTickets());
                 // Enregistrement de la somme totale de la commande 
                 $command->setSum($sumTicketsNumber[0]);
