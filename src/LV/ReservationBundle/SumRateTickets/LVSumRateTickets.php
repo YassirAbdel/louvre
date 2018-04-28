@@ -10,10 +10,11 @@ class LVSumRateTickets
      * 2. Calculer le coût totale et le nombre des billets
      */
     
-    public function getSumRateTickets ($tickets)
+    public function setSumRateTickets ($command)
     { 
         $commandSum = 0;
         $ticketNumber = 0;
+        $tickets = $command->getTickets();
         foreach ($tickets as $ticket)
             {
                 
@@ -23,8 +24,13 @@ class LVSumRateTickets
                 $ticketNumber = $ticketNumber + 1;
                 
             }
-           return $sumTicketsNumber = array($commandSum, $ticketNumber);
+            // Enregistrement de la somme totale de la commande 
+              $command->setSum($commandSum);
+            // Enregistrement du nombre de tickets 
+             $command->setNumberTickets($ticketNumber);
+            
     }
+    
 }
 
 

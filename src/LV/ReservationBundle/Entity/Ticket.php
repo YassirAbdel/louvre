@@ -328,13 +328,13 @@ class Ticket
         }
         
         $ticketRate = $ticketRateType[1];
-                $RateType = $ticketRateType[2];
-                //$commandSum = $commandSum + $ticketRate;
-                
-                // On ajoute le tarif 
-                $this->setTicketRate($ticketRate);
-                // On ajoute le type de tarif
-                $this->setRateType($RateType);
+        $RateType = $ticketRateType[2];
+        //$commandSum = $commandSum + $ticketRate;
+
+        // On ajoute le tarif 
+        $this->setTicketRate($ticketRate);
+        // On ajoute le type de tarif
+        $this->setRateType($RateType);
         //dump($this); die();
         return $ticketRateType;
     }

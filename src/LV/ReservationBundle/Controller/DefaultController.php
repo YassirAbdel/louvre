@@ -17,54 +17,37 @@ class DefaultController extends Controller
      */
     public function addAction(Request $request)
     {
-        $command = new \LV\ReservationBundle\Entity\Command;
-        $form   = $this->get('form.factory')->create(CommandType::class, $command);
-        $bookingDate = $command->getBookingDate();
-        // Enregistrement d'un code aléatoire de la commande de 10 caractères alphanumériques
-        // En appellant le service bookingCode
-        $command->setBookingCode($this->container->get('lv_reservation.bookingCode')->getRamdomCode(10));
-        //OU en utilisant la fonction PHP bin2hex
-        //$command->setBookingCode(bin2hex(openssl_random_pseudo_bytes(10)));
+        $form   = $this->get('form.factory')->create(CommandType::class);
         
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $ticketRepo = $this->getDoctrine()
             ->getManager()
             ;
+            $command = $form->getData();
             // Calcul du nombre de billets vendus à la date de réservation
-                $numberTickets = $this->getDoctrine()
-                ->getManager()
+                $numberTickets = $ticketRepo
                 ->getRepository('LVReservationBundle:Ticket')
                 ->numberTickets($command->getBookingDate())
                 ;
             // Condition : si la capacité du musée est inférieure à 1000 billets max le même jour
-            if ($numberTickets < 1000)    
-            {
+            if ($numberTickets < 1000) {
                 // Appel du service sumratetickets : 
                 // 1. ajout du type de tarif d'un billet et du tarif d'un billet 
                 // 2. récupération de la somme totale de la commande, du nombre des billets
-                $sumTicketsNumber = $this->container->get('lv_reservation.sumratetickets')->getSumRateTickets($command->getTickets());
-                // Enregistrement de la somme totale de la commande 
-                $command->setSum($sumTicketsNumber[0]);
-                // Enregistrement du nombre de tickets 
-                $command->setNumberTickets($sumTicketsNumber[1]);
-                
+                $sumTicketsNumber = $this->container->get('lv_reservation.sumratetickets')->setSumRateTickets($command);
                 $em->persist($command);
-                $em->flush();
+                //$em->flush();
+                $request->getSession()->set('command', $command);
                 $request->getSession()->getFlashBag()->add('commande', 'Votre commande a été validée. Merci de procéder au paiement');
                 
                 return $this->redirectToRoute('lv_Commande_view',array('id' => $command->getId())); 
                 
             }
-            // Condition : si la capacité du musée est dépassée
-            else 
-            {
+            // Sinon : si la capacité du musée est dépassée
                 $request->getSession()->getFlashBag()->add('billetsmax', 'Plus de billets disponible pour ce jour. La commande n\'a pas été enregistrée');
                 return $this->render('LVReservationBundle:Command:max.html.twig');
-            }
-            
-        }
-
+         }
         return $this->render('LVReservationBundle:Command:add.html.twig', array(
           'form' => $form->createView(),
         ));
@@ -77,18 +60,13 @@ class DefaultController extends Controller
         public function viewAction(Request $request)
           {
             $em = $this->getDoctrine()->getManager();
-            $command = $em->getRepository('LVReservationBundle:Command')->find($request->query->get('id'));
+            $command = $request->getSession()->get('command');
+            $listTickets = $command->getTickets();
 
             if (null === $command) {
-              throw new NotFoundHttpException("La commande numéro ".$id." n'existe pas.");
+              throw new NotFoundHttpException("La commande numéro " . " n'existe pas.");
             }
-
-            // Récupération de la liste des billets de la commande
-            $listTickets = $em
-              ->getRepository('LVReservationBundle:Ticket')
-              ->findBy(array('command' => $command))
-            ;
-            
+           
             return $this->render('LVReservationBundle:Command:view.html.twig', array(
               'command'           => $command,
               'listTickets' => $listTickets,
@@ -102,17 +80,14 @@ class DefaultController extends Controller
     function paiementAction (Request $request) 
     {
        $em = $this->getDoctrine()->getManager();
-       $command = $em->getRepository('LVReservationBundle:Command')->find($request->query->get('id'));
+       
+       $command = $request->getSession()->get('command');
+       $listTickets = $command->getTickets();
        $sum = $command->getSum();
        $numberTickets = 'Nombre de billets : ' . $command->getNumberTickets();
        
-       
-        // Set your secret key: remember to change this to your live secret key in production
-        // See your keys here: https://dashboard.stripe.com/account/apikeys
-        \Stripe\Stripe::setApiKey("sk_test_600LSdmDPJ6OwrwVoyeNHT64");
+       \Stripe\Stripe::setApiKey("sk_test_600LSdmDPJ6OwrwVoyeNHT64");
 
-        // Token is created using Checkout or Elements!
-        // Get the payment token ID submitted by the form:
         try { 
             $token = $_POST['stripeToken'];
          
@@ -126,6 +101,10 @@ class DefaultController extends Controller
         } catch (Exception $ex) {
             $request->getSession()->getFlashBag()->add('error','Paiement échoué !');
         }
+        // Enregistrement de la commande après le paiement
+        $em->persist($command);
+        $em->flush();
+        
         // Appel service lv_reservation.email pour envoyer une email de confirmation
         $this->container->get('lv_reservation.email')->sendNotificationCommand($command);
         return $this->render('LVReservationBundle:Command:paiement.html.twig');

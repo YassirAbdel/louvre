@@ -6,6 +6,7 @@ namespace LV\ReservationBundle\Email;
 
 use LV\ReservationBundle\Entity\Command;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class LVEmail
 {
@@ -26,23 +27,29 @@ class LVEmail
         
     }
     
-    public function sendNotificationCommand(Command $command)
+    public function sendNotificationCommand($command)
     {
        
-        $idCommand = $command->getId();
-        $commandRepository = $this->em->getRepository('LVReservationBundle:Command');
-        $ticketsRepository = $this->em->getRepository('LVReservationBundle:Ticket');
+        //$em = $this->getDoctrine()->getManager();
+            //$command = $em->getRepository('LVReservationBundle:Command')->find($request->query->get('id'));
+            //$command = $command->getSession()->get('command');
+            $listTickets = $command->getTickets();
+        //$idCommand = $command->getId();
+        //$commandRepository = $this->em->getRepository('LVReservationBundle:Command');
+        //$ticketsRepository = $this->em->getRepository('LVReservationBundle:Ticket');
         
         // Récupération de la commande
-        $command = $commandRepository->find($command->getId());
+        //$command = $commandRepository->find($command->getId());
 
-        if (null === $command) {
-              throw new NotFoundHttpException("La commande numéro ".$id." n'existe pas.");
-        }
+        //if (null === $command) {
+              //throw new NotFoundHttpException("La commande numéro ".$id." n'existe pas.");
+        //}
 
        // Récupération de la liste des billets de la commande
-       $listTickets = $ticketsRepository->findBy(array('command' => $command));
-        
+       //$listTickets = $ticketsRepository->findBy(array('command' => $command));
+        //dump($command);
+        //dump($listTickets);
+            //die();
        $message = (new \Swift_Message('Commande de billets d\'entrée au musée de Louvre' ))
         ->setFrom('yassir.montet70@gmail.com')
         ->setTo('yassir.montet@yahoo.fr')

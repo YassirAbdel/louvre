@@ -85,6 +85,7 @@ class Command
         $this->date = new \DateTime();
         $this->bookingDate = new \DateTime();
         $this->tickets = new ArrayCollection();
+        $this->setBookingCode();
     }
     
    /**
@@ -273,14 +274,18 @@ class Command
     /**
      * Set bookingCode.
      *
-     * @param string $bookingCode
-     *
      * @return command
      */
-    public function setBookingCode($bookingCode)
+    public function setBookingCode()
     {
-        $this->bookingCode = $bookingCode;
+        $code = '';
+        $pool = array_merge(range(0, 9), range('a', 'z'),range('A', 'Z'));
 
+        for($i=0; $i < 10; $i++) {
+        $code .= $pool[mt_rand(0, count($pool) - 1)];
+        
+        }
+        $this->bookingCode = $code;
         return $this;
     }
 
