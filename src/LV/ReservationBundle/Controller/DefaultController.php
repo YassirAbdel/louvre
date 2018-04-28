@@ -98,15 +98,17 @@ class DefaultController extends Controller
             'source' => $request->request->get('stripeToken'),
             ]);
             $request->getSession()->getFlashBag()->add('success','Paiement réussi !');
+            
+            // Enregistrement de la commande après le paiement
+            $em->persist($command);
+            $em->flush();
+        
+            // Appel service lv_reservation.email pour envoyer une email de confirmation
+            $this->container->get('lv_reservation.email')->sendNotificationCommand($command);
         } catch (Exception $ex) {
             $request->getSession()->getFlashBag()->add('error','Paiement échoué !');
         }
-        // Enregistrement de la commande après le paiement
-        $em->persist($command);
-        $em->flush();
         
-        // Appel service lv_reservation.email pour envoyer une email de confirmation
-        $this->container->get('lv_reservation.email')->sendNotificationCommand($command);
         return $this->render('LVReservationBundle:Command:paiement.html.twig');
         
     }
