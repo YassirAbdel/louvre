@@ -12,11 +12,9 @@ class CoreController extends Controller
  */
   public function indexAction()
   {
-    // On retourne simplement la vue de la page d'accueil
-    // L'affichage des 3 dernières annonces utilisera le contrôleur déjà existant dans PlatformBundle
-    return $this->render('LVCoreBundle:Core:index.html.twig');
-
-    // La méthode longue $this->get('templating')->renderResponse('...') est parfaitement valable
+    
+    //return $this->render('LVCoreBundle:Core:index.html.twig');
+    return $this->redirectToRoute('reserverBillet');
   }
 
   
