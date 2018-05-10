@@ -30,32 +30,15 @@ class LVEmail
     public function sendNotificationCommand($command)
     {
        
-        //$em = $this->getDoctrine()->getManager();
-            //$command = $em->getRepository('LVReservationBundle:Command')->find($request->query->get('id'));
-            //$command = $command->getSession()->get('command');
-            $listTickets = $command->getTickets();
-        //$idCommand = $command->getId();
-        //$commandRepository = $this->em->getRepository('LVReservationBundle:Command');
-        //$ticketsRepository = $this->em->getRepository('LVReservationBundle:Ticket');
         
-        // Récupération de la commande
-        //$command = $commandRepository->find($command->getId());
-
-        //if (null === $command) {
-              //throw new NotFoundHttpException("La commande numéro ".$id." n'existe pas.");
-        //}
-
-       // Récupération de la liste des billets de la commande
-       //$listTickets = $ticketsRepository->findBy(array('command' => $command));
-        //dump($command);
-        //dump($listTickets);
-            //die();
+       $listTickets = $command->getTickets();
+        
        $message = (new \Swift_Message('Commande de billets d\'entrée au musée de Louvre' ))
         ->setFrom('yassir.montet70@gmail.com')
-        ->setTo('yassir.montet@yahoo.fr')
+        ->setTo($command->getEmail())
         ->setBody(
             $this->templating->render('LVReservationBundle:Command:command.html.twig', array(
-               'command' => $command,
+              'command' => $command,
               'listTickets' => $listTickets,
             )
             ),

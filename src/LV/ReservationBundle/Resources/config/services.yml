@@ -5,8 +5,6 @@ services:
     
     lv_reservation.sumratetickets:
         class: LV\ReservationBundle\SumRateTickets\LVSumRateTickets
-    lv_reservation.bookingCode:
-        class: LV\ReservationBundle\BookingCode\LVBookingCode
     lv_reservation.email:
         class: LV\ReservationBundle\Email\LVEmail
         arguments: ["@mailer", "@doctrine.orm.entity_manager", "@templating"]

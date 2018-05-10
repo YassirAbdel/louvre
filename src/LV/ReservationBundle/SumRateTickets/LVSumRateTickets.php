@@ -25,9 +25,9 @@ class LVSumRateTickets
                 
             }
             // Enregistrement de la somme totale de la commande 
-              $command->setSum($commandSum);
+            $command->setSum($commandSum);
             // Enregistrement du nombre de tickets 
-             $command->setNumberTickets($ticketNumber);
+            $command->setNumberTickets($ticketNumber);
             
     }
     

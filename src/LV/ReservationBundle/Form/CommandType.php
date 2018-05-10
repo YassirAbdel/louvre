@@ -42,7 +42,7 @@ class CommandType extends AbstractType
             'by_reference' => false
         ))
         ->add('Enregistrer votre commande', SubmitType::class, array(
-            'attr' => ['class' => 'btn btn-secondary my-2 my-sm-0']
+            'attr' => ['class' => 'btn btn-secondary my-2 my-sm-0 add-command']
         ))
         ;
     }

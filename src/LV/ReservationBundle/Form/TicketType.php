@@ -22,10 +22,7 @@ class TicketType extends AbstractType
         $builder
         ->add('reducedPrice', CheckboxType::class, array(
             'required' => false,
-            'label' => 'Tarif réduit (o/n)',
-            //'class' => Modality::class
-            //'label_attr' => 'class': 'form-control'
-            //'attr''
+            'label' => 'Tarif réduit (0/N)',
             'attr' => array('class' => 'margin'),
             'label_attr' => array('class' => 'margin')
             ))
@@ -45,7 +42,7 @@ class TicketType extends AbstractType
             'label_attr' => array('class' => 'control-label')
         ))
         ->add('customerCountry',  TextType::class, array(
-            'label' => 'Pays',
+            'label' => 'Pays d\'origine',
             'attr' => array('class' => 'form-ticket-control'),
             'label_attr' => array('class' => 'control-label')
         ))

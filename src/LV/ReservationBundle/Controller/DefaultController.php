@@ -21,15 +21,14 @@ class DefaultController extends Controller
         
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $ticketRepo = $this->getDoctrine()
-            ->getManager()
-            ;
+           
             $command = $form->getData();
             // Calcul du nombre de billets vendus à la date de réservation
-                $numberTickets = $ticketRepo
-                ->getRepository('LVReservationBundle:Ticket')
-                ->numberTickets($command->getBookingDate())
+                $numberTickets = $em
+                ->getRepository('LVReservationBundle:Command')
+                ->getNumberTickets($command->getBookingDate())
                 ;
+                //dump($numberTickets);die();
             // Condition : si la capacité du musée est inférieure à 1000 billets max le même jour
             if ($numberTickets < 1000) {
                 // Appel du service sumratetickets : 
@@ -37,7 +36,6 @@ class DefaultController extends Controller
                 // 2. récupération de la somme totale de la commande, du nombre des billets
                 $sumTicketsNumber = $this->container->get('lv_reservation.sumratetickets')->setSumRateTickets($command);
                 $em->persist($command);
-                //$em->flush();
                 $request->getSession()->set('command', $command);
                 $request->getSession()->getFlashBag()->add('commande', 'Votre commande a été validée. Merci de procéder au paiement');
                 
@@ -45,7 +43,7 @@ class DefaultController extends Controller
                 
             }
             // Sinon : si la capacité du musée est dépassée
-                $request->getSession()->getFlashBag()->add('billetsmax', 'Plus de billets disponible pour ce jour. La commande n\'a pas été enregistrée');
+                $request->getSession()->getFlashBag()->add('billetsmax', 'Plus de billets disponible pour ce jour. La commande n\'est pas possible');
                 return $this->render('LVReservationBundle:Command:max.html.twig');
          }
         return $this->render('LVReservationBundle:Command:add.html.twig', array(
@@ -59,7 +57,6 @@ class DefaultController extends Controller
     
         public function viewAction(Request $request)
           {
-            $em = $this->getDoctrine()->getManager();
             $command = $request->getSession()->get('command');
             $listTickets = $command->getTickets();
 

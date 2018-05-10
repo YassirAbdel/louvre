@@ -10,14 +10,5 @@ namespace LV\ReservationBundle\Repository;
  */
 class TicketRepository extends \Doctrine\ORM\EntityRepository
 {
-    function numberTickets($date) {
-        
-        return $this->createQueryBuilder('t')
-                ->select('COUNT(t)')
-                ->where('t.date = :date')
-                ->setParameter('date', $date)
-                ->getQuery()
-                ->getSingleScalarResult()
-                ;
-   }
+    
 }

@@ -10,10 +10,21 @@ namespace LV\ReservationBundle\Repository;
  */
 class CommandRepository extends \Doctrine\ORM\EntityRepository
 {
-    //$ticket->setRateType("enfant");
-    function getRateType($advert) 
-    {
+    function getNumberTickets($date) {
         
-        
-    }
+       $numberTickets = $this->createQueryBuilder('c')
+                            ->select('sum(c.numberTickets)')
+                            ->where('c.bookingDate = :date')
+                            ->setParameter('date', $date)
+                            ->getQuery()
+                            ->getScalarResult()
+                            ;
+                            
+       $numberTicket = $numberTickets[0][1];
+       
+       
+       return $numberTicket;
+       
+       
+   }
 }
