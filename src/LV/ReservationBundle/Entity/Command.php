@@ -65,6 +65,12 @@ class Command
      *
      * @ORM\Column(name="email", type="string", length=255)
      */
+    /**
+     * @Assert\Email(
+     *     message = "The email '{{ value }}' n'est pas valide.",
+     *     checkMX = true
+     * )
+     */
     private $email;
 
     /**

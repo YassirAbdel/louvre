@@ -58,25 +58,6 @@ class CommandType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    
-    /**
-     * $builder
-      ->add('date',      DateTimeType::class)
-      ->add('title',     TextType::class)
-      ->add('author',    TextType::class)
-      ->add('content',   TextareaType::class)
-      ->add('image',     ImageType::class)
-      ->add('categories', EntityType::class, array(
-        'class'         => 'OCPlatformBundle:Category',
-        'choice_label'  => 'name',
-        'multiple'      => true,
-        'query_builder' => function(CategoryRepository $repository) use($pattern) {
-          return $repository->getLikeQueryBuilder($pattern);
-        }
-      ))
-      ->add('save',      SubmitType::class)
-    ;
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
