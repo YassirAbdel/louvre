@@ -3,7 +3,7 @@
 namespace LV\ReservationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Ticket
@@ -54,6 +54,15 @@ class Ticket
      * @var string
      *
      * @ORM\Column(name="customer_first_name", type="string", length=255)
+     * @Assert\NotNull(
+     *      message = "Le nom est obligatoire"
+     * )
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 50,
+     *      minMessage = "Your first name must be at least {{ limit }} characters long",
+     *      maxMessage = "Your first name cannot be longer than {{ limit }} characters"
+     * )
      */
     private $customerFirstName;
 

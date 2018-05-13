@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use LV\ReservationBundle\Entity\Command;
 use LV\ReservationBundle\Form\CommandType;
+use LV\ReservationBundle\Form\TicketType;
 use Symfony\Component\Validator\Constraints\DateTime;
 
 
@@ -18,7 +19,7 @@ class DefaultController extends Controller
     public function addAction(Request $request)
     {
         $form   = $this->get('form.factory')->create(CommandType::class);
-        
+        //$formTicket = $this->get('form.factory')->create(TicketType::class);
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
            

@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use \Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use \Symfony\Component\Validator\Constraints\NotBlank;
+use \Symfony\Component\Validator\Constraints\Length;
 
 
 class TicketType extends AbstractType
@@ -31,20 +33,49 @@ class TicketType extends AbstractType
             'attr' => array('class' => 'form-ticket-control'),
             'label_attr' => array(
                 'class' => 'control-label',
-                'placeholder' => 'Enter password'
-                
-                ),
+                'placeholder' => 'Votre nom'
+             ),
+            'constraints' => array(
+                new NotBlank(array(
+                    'message' => 'Champ est obligatoire'
+                )),
+                new Length(array(
+                    'min' => 2,
+                    'minMessage' => 'Le nom doit comporter plus de 2 cacartères'
+                    )),
+            ),
             
         ))
         ->add('customerFirstName',  TextType::class, array(
             'label' => 'Prénom',
             'attr' => array('class' => 'form-ticket-control'),
-            'label_attr' => array('class' => 'control-label')
+            'label_attr' => array('class' => 'control-label'),
+            'constraints' => array(
+                new NotBlank(array(
+                    'message' => 'Champ est obligatoire'
+                )),
+                new Length(array(
+                    'min' => 2,
+                    'minMessage' => 'Le prénom doit comporter plus de 2 cacartères'
+                    )),
+            ),
         ))
         ->add('customerCountry',  TextType::class, array(
             'label' => 'Pays d\'origine',
             'attr' => array('class' => 'form-ticket-control'),
-            'label_attr' => array('class' => 'control-label')
+            'label_attr' => array(
+                'class' => 'control-label',
+                'placeholder' => 'Votre prénom'
+             ),
+            'constraints' => array(
+                new NotBlank(array(
+                    'message' => 'Champ est obligatoire'
+                )),
+                new Length(array(
+                    'min' => 4,
+                    'minMessage' => 'Le pays doit comporter plus de 4 cacartères'
+                    )),
+            ),
         ))
         ->add('customerBirthDate', BirthdayType::class, array(
             'label' => 'Date de naissance',

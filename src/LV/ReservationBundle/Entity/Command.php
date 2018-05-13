@@ -64,12 +64,14 @@ class Command
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255)
-     */
-    /**
+     * @Assert\NotBlank(
+     *      message = "L'Email est obligatoire"
+     * )
      * @Assert\Email(
-     *     message = "The email '{{ value }}' n'est pas valide.",
+     *     message = "L'Email '{{ value }}' n'est pas valide.",
      *     checkMX = true
      * )
+     * @Assert\Length(min=4)
      */
     private $email;
 
@@ -327,7 +329,7 @@ class Command
           $ticketsType = $this->getTicketsType();
           if ($bookingDate == $nowDate)
           {
-              if (($ticketsType == "journée") && ($nowHour >= 14))
+              if (($ticketsType == "journée") && ($nowHour >= 8))
               {
                   $context
                   ->buildViolation('Le type de billets est invalide car il est trop tard pour réserver des billets d\'une journée.') // message
