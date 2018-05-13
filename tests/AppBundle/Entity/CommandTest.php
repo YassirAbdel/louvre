@@ -27,22 +27,7 @@ class CommandTest extends \Symfony\Bundle\FrameworkBundle\Test\WebTestCase
             ->getManager();
     }
     
-    /*public function testbookingWrongValidator()
-    {
-        $command = new \LV\ReservationBundle\Entity\Command; 
-        $bookingDate = new \DateTime("2018-05-12");
-        $ticketType = "Journée";
-        $command->setBookingDate($bookingDate);
-        $command->setTicketsType($ticketType);
-        
-        $validator = $this->createClient()->getContainer()->get('validator');
-        $errors = $validator->validate($command);
-        
-        $this->assertEquals(1, count($errors));
-        
-    }*/
-    
-     public function testbookingGoodValidator()
+    public function testbookingGoodValidator()
     {
         $validator = $this->createClient()->getContainer()->get('validator');
         
