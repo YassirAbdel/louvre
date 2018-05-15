@@ -19,7 +19,7 @@ class DefaultController extends Controller
     public function addAction(Request $request)
     {
         $form   = $this->get('form.factory')->create(CommandType::class);
-        //$formTicket = $this->get('form.factory')->create(TicketType::class);
+        
         if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
             $em = $this->getDoctrine()->getManager();
            
@@ -29,9 +29,9 @@ class DefaultController extends Controller
                 ->getRepository('LVReservationBundle:Command')
                 ->getNumberTickets($command->getBookingDate())
                 ;
-                //dump($numberTickets);die();
+             
             // Condition : si la capacité du musée est inférieure à 1000 billets max le même jour
-            if ($numberTickets < 1000) {
+            if ($numberTickets < 2) {
                 // Appel du service sumratetickets : 
                 // 1. ajout du type de tarif d'un billet et du tarif d'un billet 
                 // 2. récupération de la somme totale de la commande, du nombre des billets

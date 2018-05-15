@@ -27,12 +27,12 @@ class CommandRepositoryTest extends KernelTestCase
     
     public function testgetNumberTickets()
     {
-        $bookingDate = new \DateTime("2018-06-13");
+        $bookingDate = new \DateTime("2018-08-23");
         $numberTickets = $this->entityManager
                 ->getRepository(Command::class)
                 ->getNumberTickets($bookingDate)
         ;
                 
-        $this->assertEquals(4, $numberTickets);
+        $this->assertEquals(2, $numberTickets);
     }
 }
